@@ -2,34 +2,27 @@ services:
   postgres:
     image: postgres:15-alpine
     container_name: dashboard-postgres
-    ports:
-      - "5432:5432"
+    restart: always
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=production-dashboard
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: production-dashboard
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
     networks:
       - dashboard-network
 
   server:
     build: ./server
     container_name: dashboard-server
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./server:/app
-      - /app/node_modules
+    restart: always
     environment:
-      - NODE_ENV=development
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - POSTGRES_DATABASE=production-dashboard
-    restart: unless-stopped
+      NODE_ENV: development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DATABASE: production-dashboard
     depends_on:
       - postgres
     networks:
@@ -38,15 +31,20 @@ services:
   client:
     build: ./client
     container_name: dashboard-client
+    restart: always
+    networks:
+      - dashboard-network
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: dashboard-nginx
+    restart: always
     ports:
-      - "8080:8080"
+      - "80:80"
     volumes:
-      - ./client:/app
-      - /app/node_modules
-    environment:
-      - VUE_APP_API_URL=http://localhost:3000
-    restart: unless-stopped
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
+      - client
       - server
     networks:
       - dashboard-network

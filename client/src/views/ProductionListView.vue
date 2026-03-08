@@ -105,7 +105,7 @@ export default {
       </svg>
       <h3>Станции не найдены</h3>
       <p>Попробуйте изменить параметры поиска или добавьте новую станцию</p>
-      <UIButton buttonType="primary" @click="$router.push('/production/create')">
+      <UIButton buttonType="primary" @click="isAddProductionFormVisible = true">
         Добавить станцию
       </UIButton>
     </div>
