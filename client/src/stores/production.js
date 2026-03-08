@@ -23,7 +23,7 @@ export const useProductionStore = defineStore('production', {
   actions: {
     async fetchAllStations() {
       try {
-        const response = await axios.get('http://localhost:3000/production');
+        const response = await axios.get('http://178.72.170.85/api/production');
         this.productions = response.data;
       } catch (error) {
         console.error(`Ошибка при загрузке станций: ${error.message}`);
@@ -31,7 +31,7 @@ export const useProductionStore = defineStore('production', {
     },
     async createProduction(production) {
       try {
-        const response = await axios.post('http://localhost:3000/production', production);
+        const response = await axios.post('http://178.72.170.85/api/production', production);
         return response.data;
       } catch (error) {
         console.error(`Ошибка при обновлении записи: ${error.message}`);
