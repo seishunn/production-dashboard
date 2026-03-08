@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: dashboard-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=production-dashboard
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - dashboard-network
+
+  server:
+    build: ./server
+    container_name: dashboard-server
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DATABASE=production-dashboard
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    networks:
+      - dashboard-network
+
+  client:
+    build: ./client
+    container_name: dashboard-client
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    environment:
+      - VUE_APP_API_URL=http://localhost:3000
+    restart: unless-stopped
+    depends_on:
+      - server
+    networks:
+      - dashboard-network
+
+volumes:
+  postgres_data:
+
+networks:
+  dashboard-network:
+    driver: bridge
