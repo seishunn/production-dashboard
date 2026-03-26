@@ -51,7 +51,7 @@ export const useCabinetStore = defineStore('cabinet', {
   actions: {
     async fetchCabinetsWithRecords(productionId, startDate, endDate, allDays) {
       try {
-        const response = await axios.get(`http://178.72.170.85/api/cabinet-type/production/${productionId}`, {
+        const response = await axios.get(`http://178.72.185.179/api/cabinet-type/production/${productionId}`, {
           params: {
             startDate,
             endDate
@@ -70,7 +70,7 @@ export const useCabinetStore = defineStore('cabinet', {
     },
     async createCabinet(name) {
       try {
-        const response = await axios.post(`http://178.72.170.85/api/cabinet-type`, {
+        const response = await axios.post(`http://178.72.185.179/api/cabinet-type`, {
           name
         });
 
@@ -81,7 +81,7 @@ export const useCabinetStore = defineStore('cabinet', {
     },
     async searchCabinetsByName(name) {
       try {
-        const response = await axios.get(`http://178.72.170.85/api/cabinet-type/search`, {
+        const response = await axios.get(`http://178.72.185.179/api/cabinet-type/search`, {
           params: {
             name
           }
@@ -95,7 +95,7 @@ export const useCabinetStore = defineStore('cabinet', {
     },
     async patchCabinetRecord(cabinetTypeId, record) {
       try {
-        await axios.patch(`http://178.72.170.85/api/production-record/${cabinetTypeId}`, record);
+        await axios.patch(`http://178.72.185.179/api/production-record/${cabinetTypeId}`, record);
       } catch (error) {
         console.error(`Ошибка при обновлении записи: ${error.message}`);
       }
@@ -110,7 +110,7 @@ export const useCabinetStore = defineStore('cabinet', {
           fact: +record.fact,
         };
 
-        const response = await axios.post(`http://178.72.170.85/api/production-record`, body);
+        const response = await axios.post(`http://178.72.185.179/api/production-record`, body);
         return response.data;
       } catch (error) {
         console.error(`Ошибка при обновлении записи: ${error.message}`);
@@ -123,7 +123,7 @@ export const useCabinetStore = defineStore('cabinet', {
           productionId
         };
 
-        await axios.post(`http://178.72.170.85/api/cabinet-type/link-to-production`, body);
+        await axios.post(`http://178.72.185.179/api/cabinet-type/link-to-production`, body);
       } catch (error) {
         console.error(`Ошибка при связи шкафа с проектом: ${error.message}`);
       }
@@ -135,7 +135,7 @@ export const useCabinetStore = defineStore('cabinet', {
           productionId
         };
 
-        await axios.post(`http://178.72.170.85/api/cabinet-type/unlink-from-production`, body);
+        await axios.post(`http://178.72.185.179/api/cabinet-type/unlink-from-production`, body);
       } catch (error) {
         console.error(`Ошибка при связи шкафа с проектом: ${error.message}`);
       }
